@@ -1,2 +1,2 @@
 # Electronic_tracker
-A system for Tracking lost electronics using unique identifier
+A system for Tracking lost electronics using unique identifier (React.js UI)
