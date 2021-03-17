@@ -12,17 +12,36 @@ import {
   Container,
 } from "react-bootstrap";
 import Imgtrack from "./../share-card.jpg";
+import axios from 'axios';
 
 function useHome(props) {
   const [qrString, setqrString] = useState("Track your electronic freely");
   const [state, setstate] = useState("");
+  const [fData, setFData] = useState([]);
+
   const onchange = (e) => {
     setstate(e.target.value);
   };
 
   const onSearch = () => {
-    console.log(state);
+    const s = {serial: state}
+    axios({
+      method: "post",
+      data: s,
+      withCredentials: true,
+      url:"http://localhost:9000/search",
+    }).then((res)=>{
+      if(res.data.error){
+        setFData(res.data);
+        alert(res.data.error);
+      }else{
+        console.log(JSON.stringify(res.data));
+        setqrString(JSON.stringify(res.data));
+      }
+    });
+
   };
+  //console.log(setFData);
   const mystring = qrString;
   return (
     <div style={{ overflow: "hidden" }} className="App">
@@ -84,10 +103,13 @@ function useHome(props) {
               <Col>
                 <Card style={{ marginTop: "5em", marginLeft: "0" }}>
                   <Card.Title>We verify your product here</Card.Title>
+                  {fData.length<1? <p>
+                    {qrString}
+                    </p>:
                   <p>
                     its cheap to buy legit items. You only need to verify the
                     real owner :)
-                  </p>
+                  </p>}
                 </Card>
               </Col>
             </Row>
